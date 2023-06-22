@@ -4,7 +4,6 @@ import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,9 +12,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 // Stub
 public class PostRepository {
-    ConcurrentMap<Long, Post> posts = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Long, Post> posts = new ConcurrentHashMap<>();
 
-    AtomicLong idPost = new AtomicLong(0);
+    private static final AtomicLong idPost = new AtomicLong(0);
 
     public List<Post> all() {
 
@@ -34,12 +33,10 @@ public class PostRepository {
             id = idPost.incrementAndGet();
             post.setId(id);
             posts.put(id, post);
-        }
-        else {
+        } else {
             if (posts.containsKey(id)) {
                 posts.put(id, post);
-            }
-            else {
+            } else {
                 throw new NotFoundException("Post with id " + id + " not found: can't update post");
             }
         }
@@ -49,8 +46,7 @@ public class PostRepository {
     public void removeById(long id) {
         if (posts.containsKey(id)) {
             posts.remove(id);
-        }
-        else {
+        } else {
             throw new NotFoundException("Post with id " + id + " not found: can't delete post");
         }
     }
